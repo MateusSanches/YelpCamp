@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-
 import Campground from '../models/campground.js';
+import * as cities  from './cities.js';
 
 mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp',{
         useNewUrlParser: true,
@@ -21,3 +21,8 @@ const dbDelete = async () => {
     await c.save();
 }
 
+const dbSeed = async() => {
+    await db.insertMany(cities);    
+}
+
+dbSeed();
