@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import Campground from '../models/campground.js';
-import * as cities  from './cities.js';
+import * as seeds  from './cities.js';
+import * as seedHelpers from './seedHelpers.js';
 
 mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp',{
         useNewUrlParser: true,
@@ -21,8 +22,23 @@ const dbDelete = async () => {
     await c.save();
 }
 
-const dbSeed = async() => {
-    await db.insertMany(cities);    
+function randArray(arr){
+    return arr[Math.floor(Math.random() * arr.length)];
 }
 
-dbSeed();
+const dbSeed = async() => {
+    await Campground.deleteMany({});
+    for(let i = 0; i < 50; i++){                       
+        const camp = new Campground({
+            location: randArray(seeds.cities).city + ', ' + randArray(seeds.cities).state,
+            title: randArray(seedHelpers.descriptors) + ' ' + randArray(seedHelpers.places)
+        });
+        await camp.save();
+    }
+}
+
+ dbSeed().then(() => {
+    mongoose.connection.close();
+    console.log('Db seeded');
+ });
+
