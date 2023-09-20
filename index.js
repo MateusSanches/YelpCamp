@@ -19,12 +19,21 @@ db.once('open',() => {
 app.set('views','./views');
 app.set('view engine', 'ejs');
 
-app.get('/camp',async (req,res) => {
-    const newCamp = new Campground({title: 'TEST CAMP', price: 50});
-    await newCamp.save();
-    res.send(newCamp);
+app.get('/campground', async (req, res) => {
+    const camps = await Campground.find({});
+    res.render('index.ejs',{camps});
+});
+
+app.get('/campground/:id',async (req, res) => {
+    const camp = await Campground.findById(req.params.id);
+    res.render('show.ejs',{camp});
+});
+
+app.get('/campground/new',(req, res) => {
+    res.send('hiya'); // here be the problem
 });
 
 app.listen(3000,()=>{
     console.log('Listening on port 3000');
 });
+

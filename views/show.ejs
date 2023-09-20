@@ -6,12 +6,9 @@
     <title>YelpCamp</title>
 </head>
 <body>
-    <h1>YelpCamp</h1>
+    <h1><%= camp.title %></h1>
     <ul>
-        <%for(let camp of camps){%>
-            <li><b><a href="/campground/<%= camp._id %>"><%= camp.title %></a></b> - <%= camp.location %></li>    
-        <%}%>
+        <li><%= camp.location %></li>
     </ul>
-
 </body>
 </html>
