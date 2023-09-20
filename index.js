@@ -1,6 +1,8 @@
 import Express  from 'express';
 import mongoose from 'mongoose';
+import methodOverride from 'method-override';
 import Campground from './models/campground.js';
+import campground from './models/campground.js';
 
 
 const app = Express();
@@ -11,6 +13,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp',{
 });
 
 const db = mongoose.connection;
+
 db.on('Error', console.error.bind(console,'connection error:'));
 db.once('open',() => {
     console.log('Mongo Connected');
@@ -19,19 +22,47 @@ db.once('open',() => {
 app.set('views','./views');
 app.set('view engine', 'ejs');
 
+app.use(Express.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
+
 app.get('/campground', async (req, res) => {
     const camps = await Campground.find({});
-    res.render('index.ejs',{camps});
+    res.render('campgrounds/index.ejs',{camps});
 });
+
+app.get('/campground/new', (req, res) => {
+    res.render('campgrounds/new.ejs');
+});
+
+
 
 app.get('/campground/:id',async (req, res) => {
     const camp = await Campground.findById(req.params.id);
-    res.render('show.ejs',{camp});
+    res.render('campgrounds/show.ejs',{camp});
 });
 
-app.get('/campground/new',(req, res) => {
-    res.send('hiya'); // here be the problem
+
+app.post('/campground',async (req, res) => {
+    const camp = new Campground(req.body.campground);
+    await camp.save();
+    res.redirect('/campground/'+camp._id);
 });
+
+app.get('/campground/edit/:id', async (req, res)=>{
+    const camp = await Campground.findById(req.params.id);
+    res.render('campgrounds/edit.ejs', {camp});
+});
+
+app.patch('/campground/:id', async (req, res) => {
+    await campground.findByIdAndUpdate(req.params.id,{...req.body.campground});
+    res.redirect('/campground/' + req.params.id);
+});
+
+app.delete('/campground/:id', async (req, res) => {
+    await campground.findByIdAndDelete(req.params.id);
+    res.redirect('/campground');
+});
+
 
 app.listen(3000,()=>{
     console.log('Listening on port 3000');
