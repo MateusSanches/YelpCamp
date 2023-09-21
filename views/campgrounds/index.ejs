@@ -1,8 +1,19 @@
 <% layout('layout/boilerplate') %>
+<link rel="stylesheet" href="/css/index.css">
+
+
     <h1>Campgrouds</h1>
-    <ul>
+    <ul id="card-container">
         <%for(let camp of camps){%>
-            <li><b><a href="/campground/<%= camp._id %>"><%= camp.title %></a></b> - <%= camp.location %></li>    
+            <li class="card"> 
+                <img class="card-img" src="<%= camp.image %>" alt="Image for camp <%= camp.title %>">
+                <section class="card-info">
+                    <h2><%= camp.title %></h2>
+                    <p>Price:<%= camp.price %> $</p>
+                    <p><%= camp.description %></p>
+                    <a href="/campground/<%= camp._id %>">View Camp</a>
+                </section>
+            </li>   
         <%}%>
     </ul>
 

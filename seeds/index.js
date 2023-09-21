@@ -21,10 +21,14 @@ function randArray(arr){
 
 const dbSeed = async() => {
     await Campground.deleteMany({});
-    for(let i = 0; i < 50; i++){                       
+    for(let i = 0; i < 50; i++){  
+        const p = Math.floor(Math.random() * 50)  + 10;                   
         const camp = new Campground({
             location: randArray(seeds.cities).city + ', ' + randArray(seeds.cities).state,
-            title: randArray(seedHelpers.descriptors) + ' ' + randArray(seedHelpers.places)
+            title: randArray(seedHelpers.descriptors) + ' ' + randArray(seedHelpers.places),
+            image: 'https://source.unsplash.com/collection/483251',
+            description:'Mussum Ipsum, cacilds vidis litro abertis. Nec orci ornare consequat. Praesent lacinia ultrices consectetur. Sed non ipsum felis. Quem num gosta di mim que vai caçá sua turmis! Leite de capivaris, leite de mula manquis sem cabeça. Mauris nec dolor in eros commodo tempor. Aenean aliquam molestie leo, vitae iaculis nisl.',
+            price: p
         });
         await camp.save();
     }

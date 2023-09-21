@@ -5,9 +5,10 @@ body {
     display: flex;
     flex-direction: column;
     background-color: rgb(243, 234, 223);
+    
 }
 
 #container{
-    margin: 2em;
+    margin: 4em;
     flex: 1;
 }

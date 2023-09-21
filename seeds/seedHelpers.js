@@ -18,6 +18,7 @@ const descriptors = [
     'Dusty',
     'Diamond'
 ]
+
 const places = [
     'Flats',
     'Village',
