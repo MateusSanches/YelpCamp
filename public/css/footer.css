@@ -1,0 +1,11 @@
+footer{
+    width: 100%;
+    background-color:rgb(75, 74, 74);
+    color: antiquewhite;
+    display: flex;
+    flex-direction: row;
+}
+
+ul{
+    list-style: none;
+}

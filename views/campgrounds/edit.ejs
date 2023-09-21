@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Campfround</title>
-</head>
-<body>
+<% layout('layout/boilerplate') %>
     <h1>Edit Campground</h1>
     <form action="/campground/<%= camp._id %>?_method=PATCH" method="POST">
         <label for="name" >Title:</label>
@@ -15,5 +8,3 @@
         <button>Save Camp</button>
     </form>
     <a href="/campground/<%= camp._id %>">Back</a>
-</body>
-</html>

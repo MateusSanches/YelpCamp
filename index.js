@@ -1,11 +1,20 @@
-import Express  from 'express';
+import express  from 'express';
 import mongoose from 'mongoose';
+import ejsMate from 'ejs-mate';
 import methodOverride from 'method-override';
 import Campground from './models/campground.js';
 import campground from './models/campground.js';
 
 
-const app = Express();
+const app = express();
+
+app.use(express.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
+app.use(express.static('public'));
+
+app.engine('ejs', ejsMate);
+app.set('views','./views');
+app.set('view engine', 'ejs');
 
 mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp',{
         useNewUrlParser: true,
@@ -19,11 +28,7 @@ db.once('open',() => {
     console.log('Mongo Connected');
 });
 
-app.set('views','./views');
-app.set('view engine', 'ejs');
 
-app.use(Express.urlencoded({extended: true}));
-app.use(methodOverride('_method'));
 
 app.get('/campground', async (req, res) => {
     const camps = await Campground.find({});
@@ -33,7 +38,6 @@ app.get('/campground', async (req, res) => {
 app.get('/campground/new', (req, res) => {
     res.render('campgrounds/new.ejs');
 });
-
 
 
 app.get('/campground/:id',async (req, res) => {
@@ -62,7 +66,6 @@ app.delete('/campground/:id', async (req, res) => {
     await campground.findByIdAndDelete(req.params.id);
     res.redirect('/campground');
 });
-
 
 app.listen(3000,()=>{
     console.log('Listening on port 3000');

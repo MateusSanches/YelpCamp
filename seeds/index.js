@@ -15,13 +15,6 @@ db.once('open',() => {
     console.log('Mongo Connected');
 });
 
-
-const dbDelete = async () => {
-    await Campground.deleteMany({});
-    const c = new Campground({title: 'Strawberry Fields'});
-    await c.save();
-}
-
 function randArray(arr){
     return arr[Math.floor(Math.random() * arr.length)];
 }
