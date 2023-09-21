@@ -1,11 +1,17 @@
 <% layout('layout/boilerplate') %>
-<body>
-    <h1>New Campground</h1>
-    <form action="/campground" method="POST">
-        <label for="name">Title:</label>
-        <input type="text" name="campground[title]" id="name">
-        <label for="location">Location:</label>
-        <input type="text" name="campground[location]" id="location">
-        <button>Add Camp</button>
-    </form>
-</body>
+    <link rel="stylesheet" href="/css/new.css">
+
+    <body>
+        <h1>New Campground</h1>
+        <form id="form-new" action="/campground" method="POST">
+            <section class="input-pair">
+                <label for="name">Title:</label>
+                <input type="text" name="campground[title]" id="name">
+            </section>
+            <section class="input-pair">
+                <label for="location">Location:</label>
+                <input type="text" name="campground[location]" id="location">
+            </section>
+            <button>Add Camp</button>
+        </form>
+    </body>
