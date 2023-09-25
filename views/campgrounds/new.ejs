@@ -1,7 +1,8 @@
 <% layout('layout/boilerplate') %>
     <link rel="stylesheet" href="/css/new.css">
+    
 
-    <body>
+ 
         <h1>New Campground</h1>
         <form id="form-new" action="/campground" method="POST">
             <section class="input-pair">
@@ -9,9 +10,18 @@
                 <input type="text" name="campground[title]" id="name">
             </section>
             <section class="input-pair">
-                <label for="location">Location:</label>
-                <input type="text" name="campground[location]" id="location">
+                <label for="price">Price:</label>
+                <input type="text" name="campground[price]" id="price">
+            </section>
+            <section class="input-pair">
+                <label for="Description">Description:</label>
+                <input type="text" name="campground[description]" id="Description">
+            </section>
+            <section class="input-pair">
+                <label for="image">Image URL:</label>
+                <input type="text" name="campground[image]" id="image">
             </section>
             <button>Add Camp</button>
         </form>
-    </body>
+        <script src="/js/formValidate.js"></script>
+  

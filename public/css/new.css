@@ -9,9 +9,17 @@
     flex-direction: column;
     justify-content: start;
     height: 18rem;
+    align-items: center;
 }
 
+h1{
+    align-self: flex-end;
+}
 
 input{
     width: 10em;
+}
+
+button{
+    width: 5em;
 }

@@ -1,15 +1,15 @@
 <% layout('layout/boilerplate') %>
+<link rel="stylesheet" href="/css/index.css">
 
-<body>
-    <h1><%= camp.title %></h1>
-    <ul>
-        <li><%= camp.location %></li>
-        <li><%= camp.price %></li>
-    </ul>
-    <img src="<%= camp.image %>" alt="Image for <%= camp.title %>">
-    <p><%= camp.description %></p>
-    <a href="/campground/edit/<%= camp._id %>">Edit Camp</a>
-    <form action="/campground/<%= camp._id %>?_method=DELETE" method="POST">
-        <button>Delete</button>
-    </form>
-    <a href="/campground">Back</a>
+    <div class="card"> 
+        <img class="card-img" src="<%= camp.image %>" alt="Image for camp <%= camp.title %>">
+        <section class="card-info">
+            <h2><%= camp.title %></h2>
+            <p>Price:<%= camp.price %> $</p>
+            <p><%= camp.description %></p>
+            <form action="/campground/<%= camp._id %>?_method=DELETE" method="POST">
+                <button>Delete</button>
+            </form>
+            <a href="/campground/edit/<%= camp._id %>">Edit Camp</a>
+        </section>
+    </div>    

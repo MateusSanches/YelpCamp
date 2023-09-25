@@ -1,11 +1,25 @@
 <% layout('layout/boilerplate') %>
+    <link rel="stylesheet" href="/css/new.css">
 
-    <h1>Edit Campground</h1>
-    <form action="/campground/<%= camp._id %>?_method=PATCH" method="POST">
-        <label for="name" >Title:</label>
-        <input type="text" name="campground[title]" id="name" value="<%= camp.title %>">
-        <label for="location">Location:</label>
-        <input type="text" name="campground[location]" id="location" value="<%= camp.location %>">
-        <button>Save Camp</button>
-    </form>
-    <a href="/campground/<%= camp._id %>">Back</a>
+  
+        <h1>Edit Campground</h1>
+        <form id="form-new" action="/campground" method="POST">
+            <section class="input-pair">
+                <label for="name">Title:</label>
+                <input type="text" name="campground[title]" id="name" value="<%= camp.title %>">
+            </section>
+            <section class="input-pair">
+                <label for="price">Price:</label>
+                <input type="text" name="campground[price]" id="price" value="<%= camp.price %>">
+            </section>
+            <section class="input-pair">
+                <label for="Description">Description:</label>
+                <input type="text" name="campground[description]" id="Description" value="<%= camp.description %>">
+            </section>
+            <section class="input-pair">
+                <label for="image">Image URL:</label>
+                <input type="text" name="campground[image]" id="image" value="<%= camp.image %>">
+            </section>
+            <button>Add Camp</button>
+        </form>
+    
