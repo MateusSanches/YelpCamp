@@ -2,12 +2,29 @@ const inputs = document.querySelectorAll('input');
 const form = document.querySelector('form');
 
 
+for(let input of inputs){
+    input.addEventListener('change',() =>{
+        if((input.value) === ''){
+            input.classList.add('invalid');
+            input.classList.remove('valid')
+        } else {
+            input.classList.add('valid');
+            input.classList.remove('invalid');
+        }
+    });
+}
+
 form.addEventListener('submit',(e) => {
-    if(inputs[0].value) {
-        e.preventDefault();
-        inputs[0].classList();
-    }    
-    console.log(inputs[0].value);
-    e.preventDefault();
+    for(let input of inputs){
+        
+            if((input.value) === ''){
+                input.classList.add('invalid');
+                input.classList.remove('valid');
+                e.preventDefault();
+            } else {
+                input.classList.add('valid');
+                input.classList.remove('invalid');
+            }
+    }
 });
 

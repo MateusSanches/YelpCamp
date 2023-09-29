@@ -4,6 +4,8 @@ import ejsMate from 'ejs-mate';
 import methodOverride from 'method-override';
 import Campground from './models/campground.js';
 import campground from './models/campground.js';
+import { asyncCatcher } from './utils/asyncCatcher.js';
+import {expressError} from './utils/expressError.js'
 
 
 const app = express();
@@ -46,11 +48,12 @@ app.get('/campground/:id',async (req, res) => {
 });
 
 
-app.post('/campground',async (req, res) => {
+app.post('/campground',asyncCatcher(async (req, res) => {
+    if(!req.body.campground) throw new expressError('Missing info FUCKER', 400);
     const camp = new Campground(req.body.campground);
     await camp.save();
     res.redirect('/campground/'+camp._id);
-});
+}));
 
 app.get('/campground/edit/:id', async (req, res)=>{
     const camp = await Campground.findById(req.params.id);
@@ -65,6 +68,17 @@ app.patch('/campground/:id', async (req, res) => {
 app.delete('/campground/:id', async (req, res) => {
     await campground.findByIdAndDelete(req.params.id);
     res.redirect('/campground');
+});
+
+app.all('*', (req,res,next)=>{
+    next(new expressError('Page not Found',404));
+});
+
+app.use((err,req,res,next)=>{
+    const {message = 'Something went fucky wucky', statusCode = '500'} = err;
+    console.log(err.message);
+    console.log(err.statusCode);
+    res.send('Something went fucky wucky');
 });
 
 app.listen(3000,()=>{
