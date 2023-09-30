@@ -1,11 +1,12 @@
 import express  from 'express';
 import mongoose from 'mongoose';
 import ejsMate from 'ejs-mate';
+import {campgroundSchema} from './schemas.js'
 import methodOverride from 'method-override';
 import Campground from './models/campground.js';
 import campground from './models/campground.js';
 import { asyncCatcher } from './utils/asyncCatcher.js';
-import {expressError} from './utils/expressError.js'
+import { expressError } from './utils/expressError.js'
 
 
 const app = express();
@@ -31,6 +32,18 @@ db.once('open',() => {
 });
 
 
+// validation for campground
+
+const validateCampground = (req, res, next) =>{
+    const {error} = campgroundSchema.validate(req.body);
+    if(error){ 
+        throw new expressError(error.details[0].message, 400);
+    } else {
+        next();
+    }
+}
+
+
 
 app.get('/campground', async (req, res) => {
     const camps = await Campground.find({});
@@ -41,15 +54,13 @@ app.get('/campground/new', (req, res) => {
     res.render('campgrounds/new.ejs');
 });
 
-
-app.get('/campground/:id',async (req, res) => {
+app.get('/campground/:id', async (req, res) => {
     const camp = await Campground.findById(req.params.id);
     res.render('campgrounds/show.ejs',{camp});
 });
 
-
-app.post('/campground',asyncCatcher(async (req, res) => {
-    if(!req.body.campground) throw new expressError('Missing info FUCKER', 400);
+app.post('/campground', validateCampground, asyncCatcher(async (req, res) => {
+    // if(!req.body.campground) throw new expressError('Missing info', 400);
     const camp = new Campground(req.body.campground);
     await camp.save();
     res.redirect('/campground/'+camp._id);
@@ -60,10 +71,10 @@ app.get('/campground/edit/:id', async (req, res)=>{
     res.render('campgrounds/edit.ejs', {camp});
 });
 
-app.patch('/campground/:id', async (req, res) => {
+app.patch('/campground/:id',validateCampground, asyncCatcher(async (req, res) => {
     await campground.findByIdAndUpdate(req.params.id,{...req.body.campground});
     res.redirect('/campground/' + req.params.id);
-});
+}));
 
 app.delete('/campground/:id', async (req, res) => {
     await campground.findByIdAndDelete(req.params.id);
@@ -75,10 +86,9 @@ app.all('*', (req,res,next)=>{
 });
 
 app.use((err,req,res,next)=>{
-    const {message = 'Something went fucky wucky', statusCode = '500'} = err;
-    console.log(err.message);
-    console.log(err.statusCode);
-    res.send('Something went fucky wucky');
+    const {message = 'Something went fucky wucky', statusCode = 500} = err;
+    console.log(err.message + err.statusCode);
+    res.status(statusCode).render('error.ejs',{err});
 });
 
 app.listen(3000,()=>{

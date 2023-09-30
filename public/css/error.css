@@ -1,0 +1,16 @@
+#container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#status{
+    font-weight: 700;
+    font-size: 6em;
+}
+
+#message{
+    font-weight: 700;
+    font-size: 3em;
+}

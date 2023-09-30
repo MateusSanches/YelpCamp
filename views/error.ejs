@@ -1,0 +1,7 @@
+<% layout('./layout/boilerplate') %>
+<link rel="stylesheet" href="/css/error.css">
+
+    <div id="status"><%= err.statusCode %></div>
+    <div id="message">
+        <%= err.message %>
+    </div>
