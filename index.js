@@ -4,10 +4,10 @@ import ejsMate from 'ejs-mate';
 import {campgroundSchema} from './schemas.js'
 import methodOverride from 'method-override';
 import Campground from './models/campground.js';
-import campground from './models/campground.js';
+import Review from './models/review.js';
 import { asyncCatcher } from './utils/asyncCatcher.js';
 import { expressError } from './utils/expressError.js'
-
+import morgan from 'morgan';
 
 const app = express();
 
@@ -34,7 +34,7 @@ db.once('open',() => {
 
 // validation for campground
 
-const validateCampground = (req, res, next) =>{
+const validateCampground = (req, res) =>{
     const {error} = campgroundSchema.validate(req.body);
     if(error){ 
         throw new expressError(error.details[0].message, 400);
@@ -43,9 +43,9 @@ const validateCampground = (req, res, next) =>{
     }
 }
 
+app.use(morgan('dev'));
 
-
-app.get('/campground', async (req, res) => {
+app.get('/campground', async (req, res, ) => {
     const camps = await Campground.find({});
     res.render('campgrounds/index.ejs',{camps});
 });
@@ -66,18 +66,28 @@ app.post('/campground', validateCampground, asyncCatcher(async (req, res) => {
     res.redirect('/campground/'+camp._id);
 }));
 
+app.post('/campground/:id/review', asyncCatcher(async (req, res)=>{
+    const camp = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    camp.reviews.push(review);
+    await camp.save();
+    await review.save();
+    res.redirect('/campground/'+camp._id);
+    
+}));
+
 app.get('/campground/edit/:id', async (req, res)=>{
     const camp = await Campground.findById(req.params.id);
     res.render('campgrounds/edit.ejs', {camp});
 });
 
 app.patch('/campground/:id',validateCampground, asyncCatcher(async (req, res) => {
-    await campground.findByIdAndUpdate(req.params.id,{...req.body.campground});
+    await Campground.findByIdAndUpdate(req.params.id,{...req.body.campground});
     res.redirect('/campground/' + req.params.id);
 }));
 
 app.delete('/campground/:id', async (req, res) => {
-    await campground.findByIdAndDelete(req.params.id);
+    await Campground.findByIdAndDelete(req.params.id);
     res.redirect('/campground');
 });
 

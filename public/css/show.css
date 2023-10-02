@@ -1,0 +1,24 @@
+#review-form{
+    margin-left: 2em;
+    display: flex;
+    flex-direction: column;
+}
+
+#review-form div {
+    display: flex;
+    margin-bottom: 2em;
+    font-weight: 700;
+}
+
+label{
+    margin-right: 1em;
+}
+
+#review-container{
+    display: flex;
+}
+
+#show-review{
+    background-color: yellow;
+    margin-left: 1em;
+}

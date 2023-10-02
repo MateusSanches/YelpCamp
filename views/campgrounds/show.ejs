@@ -1,5 +1,6 @@
 <% layout('layout/boilerplate') %>
 <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/css/show.css">
 
     <div class="card"> 
         <img class="card-img" src="<%= camp.image %>" alt="Image for camp <%= camp.title %>">
@@ -13,3 +14,22 @@
             <a href="/campground/edit/<%= camp._id %>">Edit Camp</a>
         </section>
     </div>    
+    <div id="review-container">
+        <div id="review-form">
+            <form action="/campground/<%= camp._id %>/review"  method="POST">
+                <div>
+                    <label for="review">Review:</label>
+                    <textarea name="review[body]" id="review" rows="5" cols="50"></textarea>    
+                </div>
+                <div>
+                    <label for="rating">Rating:</label>
+                    <input type="range" name="review[rating]" min="1" max="5" id="rating">
+                </div>
+                <button>Send Review</button>
+            </form>
+        </div>
+        <div id="show-review">
+            <h2>hi</h2>
+        </div>    
+    </div>
+    

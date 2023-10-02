@@ -16,7 +16,7 @@ for(let input of inputs){
 
 form.addEventListener('submit',(e) => {
     for(let input of inputs){
-        
+         
             if((input.value) === ''){
                 input.classList.add('invalid');
                 input.classList.remove('valid');
@@ -24,7 +24,7 @@ form.addEventListener('submit',(e) => {
             } else {
                 input.classList.add('valid');
                 input.classList.remove('invalid');
-            }
+            } 
     }
 });
 
