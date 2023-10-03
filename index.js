@@ -1,4 +1,6 @@
 import express  from 'express';
+import session from 'express-session';
+import flash from 'connect-flash';
 import mongoose from 'mongoose';
 import ejsMate from 'ejs-mate';
 import methodOverride from 'method-override';
@@ -7,12 +9,13 @@ import morgan from 'morgan';
 import {campgroundRoutes} from './routes/campground.js'
 import { reviewRoutes } from './routes/review.js';
 
-
 const app = express();
 
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(express.static('public'));
+
+app.use(morgan('dev'));
 
 app.engine('ejs', ejsMate);
 app.set('views','./views');
@@ -30,11 +33,31 @@ db.once('open',() => {
     console.log('Mongo Connected');
 });
 
-app.use(morgan('dev'));
 
+const sessionConfig = {
+    secret: 'password',
+    resave: false,
+    saveUninitialized: true,
+    cookie:{
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 *7,
+        maxAge: 1000 * 60 * 60 * 24 *7
+    }
+}
+
+app.use(session(sessionConfig));
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success')
+    next();
+})
+
+
+// ----------- ROUTES ----------------
 app.use('/campground', campgroundRoutes);
 app.use('/campground/:id/review', reviewRoutes);
-
+// -----------------------------------
 
 app.all('*', (req,res,next)=>{
     next(new expressError('Page not Found',404));

@@ -32,6 +32,7 @@ campgroundRoutes.post('/', validateCampground, asyncCatcher(async (req, res) => 
     // if(!req.body.campground) throw new expressError('Missing info', 400);
     const camp = new Campground(req.body.campground);
     await camp.save();
+    req.flash('success', 'Campground added!');
     res.redirect('/campground/'+camp._id);
 }));
 
