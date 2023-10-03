@@ -29,7 +29,11 @@
             </form>
         </div>
         <div id="show-review">
-            <h2>hi</h2>
+            <ul>
+                <% for(let review of camp.reviews){ %>
+                    <li><b><%= review.rating %></b> - <%= review.body %> <form action="/campground/<%= camp._id %>/review/<%= review._id %>?_method=DELETE" method="POST"> <button>Delete</button></form></li>
+                <% } %>
+            </ul>
         </div>    
     </div>
     
