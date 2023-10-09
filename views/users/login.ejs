@@ -1,0 +1,18 @@
+<% layout('layout/boilerplate') %>
+<link rel="stylesheet" href="/css/validation.css">
+
+<body>
+    <h1>Login</h1>
+        <form id="form-new" action="/login" method="POST">
+            <section class="input-pair">
+                <label for="username">username:</label>
+                <input type="username" name="username" id="username" required>
+            </section>
+            <section class="input-pair">
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" required>
+            </section>
+            <button>Login</button>
+        </form>
+        <script src="/js/formValidate.js"></script>
+</body>

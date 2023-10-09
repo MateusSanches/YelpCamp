@@ -2,6 +2,7 @@ import express, { Router } from "express";
 import { asyncCatcher } from '../utils/asyncCatcher.js';
 import Campground from '../models/campground.js';
 import {campgroundSchema} from '../schemas.js'
+import { isLoggedIn } from "../utils/middleware.js";
 
 const campgroundRoutes = express.Router();
 
@@ -19,7 +20,7 @@ campgroundRoutes.get('/', async (req, res, ) => {
     res.render('campgrounds/index.ejs',{camps});
 });
 
-campgroundRoutes.get('/new', (req, res) => {
+campgroundRoutes.get('/new', isLoggedIn, (req, res) => {
     res.render('campgrounds/new.ejs');
 });
 
@@ -28,7 +29,7 @@ campgroundRoutes.get('/:id', async (req, res) => {
     res.render('campgrounds/show.ejs',{camp});
 });
 
-campgroundRoutes.post('/', validateCampground, asyncCatcher(async (req, res) => {
+campgroundRoutes.post('/', isLoggedIn, validateCampground, asyncCatcher(async (req, res) => {
     // if(!req.body.campground) throw new expressError('Missing info', 400);
     const camp = new Campground(req.body.campground);
     await camp.save();

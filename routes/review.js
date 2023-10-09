@@ -3,6 +3,7 @@ import { asyncCatcher } from '../utils/asyncCatcher.js';
 import Campground from '../models/campground.js';
 import {reviewSchema} from '../schemas.js'
 import Review from '../models/review.js';
+import { isLoggedIn } from "../utils/middleware.js";
 
 const reviewRoutes = express.Router({mergeParams: true});
 
