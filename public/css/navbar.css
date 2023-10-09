@@ -33,3 +33,7 @@ a{
     margin-left: 0.8em;
 }
 
+#nav-right{
+    margin-left: auto;
+    margin-right: 2em;
+}

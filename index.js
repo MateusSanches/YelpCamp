@@ -64,15 +64,9 @@ db.once('open',() => {
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
+    res.locals.currentUser = req.user;
     next();
 });
-
-app.get('/fakeUser',  async (req, res) => {
-    const user = new User({email: 'haha@gmail.com', username: 'me'});
-    const newUser = await User.register(user, 'password');
-    res.send(newUser);
-});
-
 
 
 // ----------- ROUTES ----------------

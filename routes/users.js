@@ -9,15 +9,19 @@ userRoutes.get('/register', (req, res)=>{
     res.render('users/newUser.ejs');
 });
 
-userRoutes.post('/register', asyncCatcher(async (req, res)=>{
+userRoutes.post('/register', asyncCatcher(async (req, res, next)=>{
     try {
         const {email, username, password} = req.body;
         const user = new User({email: email, username: username});
         const newUser = await User.register(user, password);
-        req.flash('success','Welcome to Yelp-Camp!');
-        res.redirect('/campground');
+        req.login(newUser, err => {
+            if (err) return next(err);
+            req.flash('success','Welcome to Yelp-Camp!');
+            res.redirect('/campground');
+        });
+        
     } catch (e) {
-        req.flash('success','' + e.message);
+        req.flash('error','' + e.message);
         res.redirect('/register');
     }
 }));
@@ -30,5 +34,17 @@ userRoutes.post('/login', passport.authenticate('local', {failureFlash: true, fa
     req.flash('success','Logged in');
     res.redirect('/campground');
 }));
+
+userRoutes.get('/logout',  (req, res) => {
+    
+    req.logout(  (err) => {
+        if (err) {
+            return next(err);
+        }
+        req.flash('success','Logged out');
+        res.redirect('/campground');
+    });
+    
+});
 
 export {userRoutes}

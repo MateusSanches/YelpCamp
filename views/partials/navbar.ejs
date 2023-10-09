@@ -4,4 +4,12 @@
     <a id="nav-home" href="/">Home</a>
     <a id="nav-campgrounds" href="/campground">Campgrounds</a>
     <a id="nav-new" href="/campground/new">New Campground</a>
+    <div id="nav-right">
+        <% if(!currentUser) {%>
+            <a href="/login">Login</a>
+            <a href="/register">Sing Up</a>
+        <% } else { %>
+            <a href="/logout">Log Out</a>
+        <% } %>
+    </div>
 </nav>
