@@ -1,54 +1,23 @@
 import express from "express";
 import { asyncCatcher } from '../utils/asyncCatcher.js';
-import Campground from '../models/campground.js';
 import { isLoggedIn ,isCampOwner, validateCampground } from "../utils/middleware.js";
+import * as campControl from "../controllers/campgrounds.js";
 
 const campgroundRoutes = express.Router();
 
-campgroundRoutes.get('/', async (req, res, ) => {
-    const camps = await Campground.find({});
-    res.render('campgrounds/index.ejs',{camps});
-});
+campgroundRoutes.get('/', campControl.index);
 
-campgroundRoutes.get('/new', isLoggedIn, (req, res) => {
-    res.render('campgrounds/new.ejs');
-});
+campgroundRoutes.get('/new', isLoggedIn, campControl.newForm);
 
-campgroundRoutes.get('/:id', async (req, res) => {
-    const camp = await Campground.findById(req.params.id).populate({
-        path:'reviews',
-        populate: {
-            path:'author'
-        }
-    }).populate('author');
-    res.render('campgrounds/show.ejs',{camp});
-});
+campgroundRoutes.get('/:id', campControl.showCamp);
 
-campgroundRoutes.post('/', isLoggedIn, isCampOwner, validateCampground, asyncCatcher(async (req, res) => {
-    // if(!req.body.campground) throw new expressError('Missing info', 400);
-    const camp = new Campground(req.body.campground);
-    camp.author = req.user._id;
-    await camp.save();
-    req.flash('success', 'Campground added!');
-    res.redirect('/campground/'+camp._id);
-}));
+campgroundRoutes.post('/', isLoggedIn, validateCampground, asyncCatcher(campControl.newCamp));
 
-campgroundRoutes.get('/edit/:id', isLoggedIn, isCampOwner, async (req, res)=>{
-    const camp = await Campground.findById(req.params.id);
-    res.render('campgrounds/edit.ejs', {camp});
-});
+campgroundRoutes.get('/edit/:id', isLoggedIn, isCampOwner, campControl.editCampForm);
 
-campgroundRoutes.put('/:id', isLoggedIn, isCampOwner, validateCampground, asyncCatcher(async (req, res) => {
-    await Campground.findByIdAndUpdate(req.params.id,{...req.body.campground});
-    req.flash('success', 'Campground updated!');
-    res.redirect('/campground/' + req.params.id);
-}));
+campgroundRoutes.put('/:id', isLoggedIn, isCampOwner, validateCampground, asyncCatcher(campControl.editCamp));
 
-campgroundRoutes.delete('/:id', async (req, res) => {
-    await Campground.findByIdAndDelete(req.params.id);
-    res.redirect('/campground');
-});
-
+campgroundRoutes.delete('/:id',isLoggedIn, isCampOwner, campControl.deleteCamp);
 
 
 export {campgroundRoutes}
