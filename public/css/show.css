@@ -10,9 +10,9 @@
     font-weight: 700;
 }
 
-label{
+/* label{
     margin-right: 1em;
-}
+} */
 
 #review-container{
     display: flex;

@@ -5,19 +5,18 @@ import * as campControl from "../controllers/campgrounds.js";
 
 const campgroundRoutes = express.Router();
 
-campgroundRoutes.get('/', campControl.index);
+campgroundRoutes.route('/')
+    .get( campControl.index)
+    .post( isLoggedIn, validateCampground, asyncCatcher(campControl.newCamp));
 
 campgroundRoutes.get('/new', isLoggedIn, campControl.newForm);
 
-campgroundRoutes.get('/:id', campControl.showCamp);
-
-campgroundRoutes.post('/', isLoggedIn, validateCampground, asyncCatcher(campControl.newCamp));
+campgroundRoutes.route('/:id')
+    .get( campControl.showCamp)
+    .put( isLoggedIn, isCampOwner, validateCampground, asyncCatcher(campControl.editCamp))
+    .delete( isLoggedIn, isCampOwner, campControl.deleteCamp);
 
 campgroundRoutes.get('/edit/:id', isLoggedIn, isCampOwner, campControl.editCampForm);
-
-campgroundRoutes.put('/:id', isLoggedIn, isCampOwner, validateCampground, asyncCatcher(campControl.editCamp));
-
-campgroundRoutes.delete('/:id',isLoggedIn, isCampOwner, campControl.deleteCamp);
 
 
 export {campgroundRoutes}
