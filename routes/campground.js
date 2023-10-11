@@ -2,7 +2,7 @@ import express, { Router } from "express";
 import { asyncCatcher } from '../utils/asyncCatcher.js';
 import Campground from '../models/campground.js';
 import {campgroundSchema} from '../schemas.js'
-import { isLoggedIn } from "../utils/middleware.js";
+import { isLoggedIn ,isCampOwner } from "../utils/middleware.js";
 
 const campgroundRoutes = express.Router();
 
@@ -25,25 +25,27 @@ campgroundRoutes.get('/new', isLoggedIn, (req, res) => {
 });
 
 campgroundRoutes.get('/:id', async (req, res) => {
-    const camp = await Campground.findById(req.params.id).populate('reviews');
+    const camp = await Campground.findById(req.params.id).populate('reviews').populate('author');
     res.render('campgrounds/show.ejs',{camp});
 });
 
-campgroundRoutes.post('/', isLoggedIn, validateCampground, asyncCatcher(async (req, res) => {
+campgroundRoutes.post('/', isLoggedIn, isCampOwner, validateCampground, asyncCatcher(async (req, res) => {
     // if(!req.body.campground) throw new expressError('Missing info', 400);
     const camp = new Campground(req.body.campground);
+    camp.author = req.user._id;
     await camp.save();
     req.flash('success', 'Campground added!');
     res.redirect('/campground/'+camp._id);
 }));
 
-campgroundRoutes.get('/edit/:id', async (req, res)=>{
+campgroundRoutes.get('/edit/:id', isLoggedIn, isCampOwner, async (req, res)=>{
     const camp = await Campground.findById(req.params.id);
     res.render('campgrounds/edit.ejs', {camp});
 });
 
-campgroundRoutes.patch('/:id',validateCampground, asyncCatcher(async (req, res) => {
+campgroundRoutes.put('/:id', isLoggedIn, isCampOwner, validateCampground, asyncCatcher(async (req, res) => {
     await Campground.findByIdAndUpdate(req.params.id,{...req.body.campground});
+    req.flash('success', 'Campground updated!');
     res.redirect('/campground/' + req.params.id);
 }));
 

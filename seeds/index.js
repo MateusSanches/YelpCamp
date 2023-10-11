@@ -24,6 +24,7 @@ const dbSeed = async() => {
     for(let i = 0; i < 50; i++){  
         const p = Math.floor(Math.random() * 50)  + 10;                   
         const camp = new Campground({
+            author: '65244d6d6f944a833569ef57', 
             location: randArray(seeds.cities).city + ', ' + randArray(seeds.cities).state,
             title: randArray(seedHelpers.descriptors) + ' ' + randArray(seedHelpers.places),
             image: 'https://source.unsplash.com/collection/483251',

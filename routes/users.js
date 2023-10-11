@@ -2,6 +2,7 @@ import  express  from "express";
 import User from "../models/user.js";
 import { asyncCatcher } from "../utils/asyncCatcher.js";
 import passport from "passport";
+import { storeReturnTo } from "../utils/middleware.js";
 
 const userRoutes = express.Router({mergeParams: true});
 
@@ -30,9 +31,11 @@ userRoutes.get('/login', asyncCatcher(async(req,res) => {
     res.render('users/login.ejs');
 }));
 
-userRoutes.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect:'/login'}), asyncCatcher(async(req,res) => {
+userRoutes.post('/login',storeReturnTo, passport.authenticate('local', {failureFlash: true, failureRedirect:'/login'}), asyncCatcher(async(req,res) => {
     req.flash('success','Logged in');
-    res.redirect('/campground');
+    const redirectUrl = res.locals.returnTo || '/campground'
+    req.session.returnTo = null;
+    res.redirect(redirectUrl);
 }));
 
 userRoutes.get('/logout',  (req, res) => {

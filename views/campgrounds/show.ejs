@@ -6,12 +6,15 @@
         <img class="card-img" src="<%= camp.image %>" alt="Image for camp <%= camp.title %>">
         <section class="card-info">
             <h2><%= camp.title %></h2>
+            <p>Author: <%= camp.author.username %></p>
             <p>Price:<%= camp.price %> $</p>
             <p><%= camp.description %></p>
-            <form action="/campground/<%= camp._id %>?_method=DELETE" method="POST">
-                <button>Delete</button>
-            </form>
-            <a href="/campground/edit/<%= camp._id %>">Edit Camp</a>
+            <% if(currentUser && camp.author.equals(currentUser._id)) {%>
+                <form action="/campground/<%= camp._id %>?_method=DELETE" method="POST">
+                    <button>Delete</button>
+                </form>
+                <a href="/campground/edit/<%= camp._id %>">Edit Camp</a>
+            <% } %>
         </section>
     </div>    
     <div id="review-container">

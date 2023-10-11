@@ -3,7 +3,7 @@
 
   
         <h1>Edit Campground</h1>
-        <form id="form-new" action="/campground" method="POST">
+        <form id="form-new" action="/campground/<%= camp._id %>?_method=PUT" method="POST">
             <section class="input-pair">
                 <label for="name">Title:</label>
                 <input type="text" name="campground[title]" id="name" value="<%= camp.title %>">
