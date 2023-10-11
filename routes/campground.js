@@ -1,19 +1,9 @@
-import express, { Router } from "express";
+import express from "express";
 import { asyncCatcher } from '../utils/asyncCatcher.js';
 import Campground from '../models/campground.js';
-import {campgroundSchema} from '../schemas.js'
-import { isLoggedIn ,isCampOwner } from "../utils/middleware.js";
+import { isLoggedIn ,isCampOwner, validateCampground } from "../utils/middleware.js";
 
 const campgroundRoutes = express.Router();
-
-const validateCampground = (req, res, next) =>{
-    const {error} = campgroundSchema.validate(req.body);
-    if(error){ 
-        throw new expressError(error.details[0].message, 400);
-    } else {
-        next();
-    }
-};
 
 campgroundRoutes.get('/', async (req, res, ) => {
     const camps = await Campground.find({});
@@ -25,7 +15,12 @@ campgroundRoutes.get('/new', isLoggedIn, (req, res) => {
 });
 
 campgroundRoutes.get('/:id', async (req, res) => {
-    const camp = await Campground.findById(req.params.id).populate('reviews').populate('author');
+    const camp = await Campground.findById(req.params.id).populate({
+        path:'reviews',
+        populate: {
+            path:'author'
+        }
+    }).populate('author');
     res.render('campgrounds/show.ejs',{camp});
 });
 

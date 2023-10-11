@@ -18,6 +18,7 @@
         </section>
     </div>    
     <div id="review-container">
+        <% if(currentUser) {%>
         <div id="review-form">
             <form action="/campground/<%= camp._id %>/review"  method="POST">
                 <div>
@@ -31,10 +32,19 @@
                 <button>Send Review</button>
             </form>
         </div>
+        <% } %>
         <div id="show-review">
             <ul>
                 <% for(let review of camp.reviews){ %>
-                    <li><b><%= review.rating %></b> - <%= review.body %> <form action="/campground/<%= camp._id %>/review/<%= review._id %>?_method=DELETE" method="POST"> <button>Delete</button></form></li>
+                    <li>
+                        <b><%= review.rating %></b> - <%= review.body %>
+                        <p>Review by: <%= review.author.username %> </p>
+                        <% if(review.author.equals(currentUser)){ %>
+                            <form action="/campground/<%= camp._id %>/review/<%= review._id %>?_method=DELETE" method="POST"> 
+                                <button>Delete</button>
+                            </form>
+                        <% } %>
+                    </li>
                 <% } %>
             </ul>
         </div>    
